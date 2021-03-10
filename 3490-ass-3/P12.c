@@ -10,7 +10,7 @@ typedef struct pair
     char signature[255];
 } pair;
 
-struct pair pairs[25];
+struct pair pairs[30000];
 
 int cmp (const void * a, const void * b) {
     const struct pair *strA = a;
@@ -120,7 +120,7 @@ int main(int arg, char** argc) {
         //    printf("%s\n", pairs[x].signature);
         // }
         // printf("\n\n");
-        qsort(pairs, 25, sizeof(pair), cmp);
+        qsort(pairs, 30000, sizeof(pair), cmp);
 
         // for(int x = 0; x < 25; x++) {
         //    printf("%s\n", pairs[x].signature);
@@ -129,7 +129,7 @@ int main(int arg, char** argc) {
         char oGX[255];
         strcpy(oGX,inputStr);
         qsort(inputStr, strlen(inputStr), sizeof(char), cmpChar);
-        printf("number of anagrams %d", count(pairs, inputStr, 25, oGX));
+        printf("number of anagrams %d", count(pairs, inputStr, 30000, oGX));
 
     }
 
