@@ -2,28 +2,40 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 
-void search(char* pat, char* txt) 
+typedef struct Pairs
+{
+    int match;
+    int patternShift;
+}Pairs;
+
+struct Pairs search(char* pat, char* txt) //function to search for string using bruteforce
 { 
-	int M = strlen(pat); 
-	int N = strlen(txt); 
-    int ps = 0;
-    int p = 0;
-
-	/* A loop to slide pat[] one by one */
-	for (int i = 0; i <= N - M; i++) { 
+    struct Pairs pair;
+	int patLength = strlen(pat); 
+	int txtLength = strlen(txt); 
+    int patternShift = 0;
+    int matchCount = 0;
+    
+	for (int i = 0; i <= txtLength - patLength; i++) { //looping through the text
 		int j; 
-		for (j = 0; j < M; j++) {
+		for (j = 0; j < patLength; j++) {   //looping through the pattern and comparing characters with the text
 			if (txt[i + j] != pat[j]) {
 				break; 
             }
         }
-        // printf("comparison done ps=%d\n", ps++);
-		if (j == M) { // if pat[0...M-1] = txt[i, i+1, ...i+M-1] 
-			p++;
+        patternShift++; //counting all th pattern shifts
+		if (j == patLength) {
+			matchCount++;   //counting all the matches that were found
         }
-	} 
-    printf("pattern shift %d\n", ps-1);
+	}
+
+    pair.match = matchCount;
+    pair.patternShift = patternShift;
+
+    return pair; 
+    
 } 
 
 int main(int arg, char** argc) {
@@ -32,6 +44,8 @@ int main(int arg, char** argc) {
     FILE *file;    //file object
     char * buffer = 0;
     long length;
+    clock_t start;
+    clock_t end;
 
     file = fopen(inputFile, "r");  //opening file for reading
 
@@ -41,7 +55,6 @@ int main(int arg, char** argc) {
     }
     else{
         // char line[256];    //variable to store the integers scanned from the file
-        int j = 0;  //index for the array
         fseek (file, 0, SEEK_END);
         length = ftell (file);
         fseek (file, 0, SEEK_SET);
@@ -51,14 +64,11 @@ int main(int arg, char** argc) {
             fread (buffer, 1, length, file);
         }
 
+        start = clock();
+        struct Pairs pair = search(inputStr,buffer);
+        end = clock() - start;
 
-        // printf("%s\n", buffer);
-        // for(int x = 0; x < 10; x++) {
-        //     printf("%s\n", data[x]);
-        // }
-
-
-        printf("%ld\n", strlen(buffer));
-        search(inputStr,buffer);
+        double time_taken = ((double)end)/CLOCKS_PER_SEC;
+        printf("For Bruteforce with word:%s    Matches:%d      Pattern Shifts:%d       time:%f\n", inputStr, pair.match, pair.patternShift, time_taken);
     }
 }

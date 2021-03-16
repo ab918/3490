@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <time.h>
 
 void search(int data[], char num[], int size) {
@@ -30,15 +31,18 @@ void search(int data[], char num[], int size) {
             }
         }
         if(found == true) {
+            int realNum = atoi(num);
+            if(data[i] != realNum) {
                 x++;
                 printf("ans: %d %d\n", data[i], x);
+            }
             }
     }
 
 }
 
 int main(int arg, char** argc) {
-    clock_t begin = clock();
+    
     char *inputFile = argc[1];  //storing the input file name
     char *inputStr = argc[2];
     FILE *file;    //file object
@@ -53,6 +57,7 @@ int main(int arg, char** argc) {
         return -1;
     }
     else{
+        printf("From Brute Force\n");
         int num = 0;    //variable to store the integers scanned from the file
         int j = 0;  //index for the array
         while (fscanf(file, "%d", &num) > 0)   //scanning file and storing the integers in the num variables
@@ -61,11 +66,12 @@ int main(int arg, char** argc) {
             j++;
         }
         fclose(file);
-
+        clock_t begin = clock();
         search(data, inputStr, strlen(inputStr));
+        clock_t end = clock();
+        double time = (double)(end - begin)/CLOCKS_PER_SEC;
+        printf("time: %f secs\n", time);
     }
 
-    clock_t end = clock();
-    double time = (double)(end - begin)/CLOCKS_PER_SEC;
-    printf("time: %0.1f secs\n", time);
+    
 }

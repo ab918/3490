@@ -103,6 +103,7 @@ int main(int arg, char** argc) {
         return -1;
     }
     else{
+        printf("From presorted technique\n");
         int num = 0;    //variable to store the integers scanned from the file
         int j = 0;  //index for the array
         while (fscanf(file, "%d", &num) > 0)   //scanning file and storing the integers in the num variables
@@ -125,12 +126,15 @@ int main(int arg, char** argc) {
         // for(int x = 0; x < 25; x++) {
         //    printf("%s\n", pairs[x].signature);
         // }
-        printf("searching for %s\n", inputStr);
+        // printf("searching for %s\n", inputStr);
         char oGX[255];
         strcpy(oGX,inputStr);
         qsort(inputStr, strlen(inputStr), sizeof(char), cmpChar);
-        printf("number of anagrams %d", count(pairs, inputStr, 30000, oGX));
-
+        clock_t begin = clock();
+        printf("ans: %d\n", count(pairs, inputStr, 30000, oGX));
+        clock_t end = clock();
+        double time = (double)(end - begin)/CLOCKS_PER_SEC;
+        printf("time: %f secs\n", time);
     }
 
     
